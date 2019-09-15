@@ -15,8 +15,11 @@ let squareX;
 let squareY;
 let squareSize = 100;
 let knightImg;
+let monsterImg;
 let knightX = 0;
 let knightY = 500;
+let monsterX = 0;
+let monsterY = 0;
 
 // preload()
 //
@@ -25,6 +28,7 @@ let knightY = 500;
 function preload() {
 
   knightImg = loadImage("assets/images/Knight.gif");
+  monsterImg = loadImage("assets/images/bat.gif");
 }
 
 
@@ -52,6 +56,7 @@ function setup() {
   noStroke();
 
   image(knightImg, knightX, knightY, 80,80);
+  image(monsterImg, monsterX, monsterY, 80,80);
 }
 
 
@@ -79,7 +84,17 @@ function draw() {
   // Display the square
   rect(squareX,squareY,squareSize,squareSize);
 
-  //Making the knight move;
+  //Making the knight move horizontally from left to right
   knightX+=1;
   image(knightImg, knightX, knightY, 80,80);
+
+  //Making an image move along with the mouse and acts as a brush tool
+
+  monsterX = mouseX;
+  monsterY = mouseY;
+  image(monsterImg, monsterX, monsterY, 80,80);
+
+  
+
+
 }
