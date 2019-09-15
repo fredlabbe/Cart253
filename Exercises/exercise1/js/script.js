@@ -14,7 +14,9 @@ let circleSize = 100;
 let squareX;
 let squareY;
 let squareSize = 100;
-
+let knightImg;
+let knightX = 0;
+let knightY = 500;
 
 // preload()
 //
@@ -22,6 +24,7 @@ let squareSize = 100;
 
 function preload() {
 
+  knightImg = loadImage("assets/images/Knight.gif");
 }
 
 
@@ -47,6 +50,8 @@ function setup() {
   rectMode(CENTER);
   // We won't have a stroke in this
   noStroke();
+
+  image(knightImg, knightX, knightY, 80,80);
 }
 
 
@@ -73,4 +78,8 @@ function draw() {
   fill(0,0,255,10);
   // Display the square
   rect(squareX,squareY,squareSize,squareSize);
+
+  //Making the knight move;
+  knightX+=1;
+  image(knightImg, knightX, knightY, 80,80);
 }
