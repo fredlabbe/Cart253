@@ -11,6 +11,8 @@ A simple dodging game with keyboard controls
 let avatarX;
 let avatarY;
 let avatarSize = 50;
+let avatarWidth = avatarSize/2;
+let avatarHeight = avatarSize/2;
 
 // The speed and velocity of our avatar circle
 let avatarSpeed = 10;
@@ -29,6 +31,16 @@ let enemyVX = 5;
 // How many dodges the player has made
 let dodges = 0;
 
+let avatarImg;
+
+function preload(){
+
+  avatarImg = loadImage("assets/images/falcon.png");
+
+}
+
+//
+
 // setup()
 //
 // Make the canvas, position the avatar and anemy
@@ -46,6 +58,11 @@ function setup() {
 
   // No stroke so it looks cleaner
   noStroke();
+
+  rect(0,0,500,60);
+
+
+
 }
 
 // draw()
@@ -55,6 +72,14 @@ function setup() {
 function draw() {
   // A pink background
   background(255,220,220);
+  stroke(0);
+  //strokeWidth(5);
+  fill(255);
+  rect(0,0,500,60);
+  noStroke();
+  fill(255,0,0);
+  textSize(64);
+  text(dodges, 10, 50);
 
   // Default the avatar's velocity to 0 in case no key is pressed this frame
   avatarVX = 0;
@@ -84,17 +109,18 @@ function draw() {
   avatarX = avatarX + avatarVX;
   avatarY = avatarY + avatarVY;
 
-  // The enemy always moves at enemySpeed
-  enemyVX = enemySpeed;
+
   // Update the enemy's position based on its velocity
   enemyX = enemyX + enemyVX;
+
+
 
   // Check if the enemy and avatar overlap - if they do the player loses
   // We do this by checking if the distance between the centre of the enemy
   // and the centre of the avatar is less that their combined radii
   if (dist(enemyX,enemyY,avatarX,avatarY) < enemySize/2 + avatarSize/2) {
     // Tell the player they lost
-    console.log("YOU LOSE!");
+
     // Reset the enemy's position
     enemyX = 0;
     enemyY = random(0,height);
@@ -103,12 +129,16 @@ function draw() {
     avatarY = height/2;
     // Reset the dodge counter
     dodges = 0;
+
+    lose();
+
+
   }
 
   // Check if the avatar has gone off the screen (cheating!)
   if (avatarX < 0 || avatarX > width || avatarY < 0 || avatarY > height) {
     // If they went off the screen they lose in the same way as above.
-    console.log("YOU LOSE!");
+    lose();
     enemyX = 0;
     enemyY = random(0,height);
     avatarX = width/2;
@@ -125,7 +155,12 @@ function draw() {
     // Reset the enemy's position to the left at a random height
     enemyX = 0;
     enemyY = random(0,height);
-  }
+
+    //Increasing ennemySize
+    enemySize = enemySize + dodges;
+
+    // Augmenting the speed of enemySpeed by 25%
+      enemyVX = enemySpeed + 1.25*dodges; }
 
   // Display the number of successful dodges in the console
   console.log(dodges);
@@ -133,11 +168,24 @@ function draw() {
   // The player is black
   fill(0);
   // Draw the player as a circle
-  ellipse(avatarX,avatarY,avatarSize,avatarSize);
+  //ellipse(avatarX,avatarY,avatarSize,avatarSize);
+  image(avatarImg,avatarX,avatarY,avatarSize,avatarSize);
 
   // The enemy is red
   fill(255,0,0);
   // Draw the enemy as a circle
   ellipse(enemyX,enemyY,enemySize,enemySize);
 
+
+}
+
+function lose(){
+  fill(255,0,0);
+  textSize(15);
+  text("YOU LOSE! Click to restart",200,30);
+  noLoop();
+}
+
+function mousePressed(){
+  loop();
 }
