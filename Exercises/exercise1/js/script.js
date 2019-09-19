@@ -16,10 +16,13 @@ let squareY;
 let squareSize = 100;
 let knightImg;
 let monsterImg;
+let birdImg;
 let knightX = 0;
 let knightY = 500;
 let monsterX = 0;
 let monsterY = 0;
+let birdX = 1;
+let birdY = 1;
 
 // preload()
 //
@@ -29,6 +32,7 @@ function preload() {
 
   knightImg = loadImage("assets/images/Knight.gif");
   monsterImg = loadImage("assets/images/bat.gif");
+  birdImg = loadImage("assets/images/bird.gif");
 }
 
 
@@ -57,6 +61,7 @@ function setup() {
 
   image(knightImg, knightX, knightY, 80,80);
   image(monsterImg, monsterX, monsterY, 80,80);
+  image(birdImg, birdX, birdY, 80,80);
 }
 
 
@@ -67,7 +72,7 @@ function setup() {
 
 function draw() {
   // We don't fill the background so we get a drawing effect
-
+  background(255);
   // Move circle up and to the right
   circleX += 1;
   circleY -= 1;
@@ -89,12 +94,16 @@ function draw() {
   image(knightImg, knightX, knightY, 80,80);
 
   //Making an image move along with the mouse and acts as a brush tool
-
   monsterX = mouseX;
   monsterY = mouseY;
   image(monsterImg, monsterX, monsterY, 80,80);
 
-  
+  // Making a bird move in sinusoidal function
+  //birdX++;
+  //birdY = Math.sin(birdX);
+  //birdY= 2*birdX*birdX + 5*birdX + 10
+  //birdY = birdX + 2
+  //image(birdImg, birdX, birdY, 80,80);
 
 
 }
