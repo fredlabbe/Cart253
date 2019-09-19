@@ -21,8 +21,9 @@ let knightX = 0;
 let knightY = 500;
 let monsterX = 0;
 let monsterY = 0;
-let birdX = 1;
-let birdY = 1;
+let birdX = 5;
+let birdY = 5;
+let period = 10;
 
 // preload()
 //
@@ -32,7 +33,7 @@ function preload() {
 
   knightImg = loadImage("assets/images/Knight.gif");
   monsterImg = loadImage("assets/images/bat.gif");
-  birdImg = loadImage("assets/images/bird.gif");
+  birdImg = loadImage("assets/images/bird.jpg");
 }
 
 
@@ -99,11 +100,10 @@ function draw() {
   image(monsterImg, monsterX, monsterY, 80,80);
 
   // Making a bird move in sinusoidal function
-  //birdX++;
-  //birdY = Math.sin(birdX);
-  //birdY= 2*birdX*birdX + 5*birdX + 10
-  //birdY = birdX + 2
-  //image(birdImg, birdX, birdY, 80,80);
+  birdX+= 0.1;
+  birdY = 100*sin(birdX + (2*3.1416)/period) + 250;
+  image(birdImg, birdX, birdY, 80,80);
+
 
 
 }
