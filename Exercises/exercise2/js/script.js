@@ -31,11 +31,20 @@ let enemyVX = 5;
 // How many dodges the player has made
 let dodges = 0;
 
+//The images used
 let avatarImg;
+let ennemyImg;
+let spaceImg;
 
+//This is the rate of 10% the speed and size will increase
+let rate = 1.1;
+
+//preloads the images and put it in variables
 function preload(){
 
   avatarImg = loadImage("assets/images/falcon.png");
+  ennemyImg = loadImage("assets/images/asteroid.png");
+  spaceImg = loadImage("assets/images/space.jpg");
 
 }
 
@@ -54,7 +63,7 @@ function setup() {
 
   // Put the enemy to the left at a random y coordinate within the canvas
   enemyX = 0;
-  enemyY = random(0,height);
+  enemyY = random(60,height);
 
   // No stroke so it looks cleaner
   noStroke();
@@ -70,14 +79,16 @@ function setup() {
 // Handle moving the avatar and enemy and checking for dodges and
 // game over situations.
 function draw() {
-  // A pink background
-  background(255,220,220);
-  stroke(0);
+  // A space background
+  //background(255,220,220);
+  image(spaceImg,0,60,width,height);
+  //Setting up the menu bar
+  stroke(201, 83, 128);
   //strokeWidth(5);
-  fill(255);
+  fill(55, 52, 138);
   rect(0,0,500,60);
   noStroke();
-  fill(255,0,0);
+  fill(201, 83, 128);
   textSize(64);
   text(dodges, 10, 50);
 
@@ -123,7 +134,7 @@ function draw() {
 
     // Reset the enemy's position
     enemyX = 0;
-    enemyY = random(0,height);
+    enemyY = random(60,height);
     // Reset the avatar's position
     avatarX = width/2;
     avatarY = height/2;
@@ -131,6 +142,7 @@ function draw() {
     dodges = 0;
 
     lose();
+    enemySize = 50;
 
 
   }
@@ -160,21 +172,20 @@ function draw() {
     enemySize = enemySize + dodges;
 
     // Augmenting the speed of enemySpeed by 25%
-      enemyVX = enemySpeed + 1.25*dodges; }
+      enemyVX = enemySpeed + rate*dodges; }
 
   // Display the number of successful dodges in the console
   console.log(dodges);
 
-  // The player is black
-  fill(0);
-  // Draw the player as a circle
+  // Draw the player as an image of the Millenium Falcon
   //ellipse(avatarX,avatarY,avatarSize,avatarSize);
   image(avatarImg,avatarX,avatarY,avatarSize,avatarSize);
 
   // The enemy is red
   fill(255,0,0);
   // Draw the enemy as a circle
-  ellipse(enemyX,enemyY,enemySize,enemySize);
+  //ellipse(enemyX,enemyY,enemySize,enemySize);
+  image(ennemyImg, enemyX,enemyY,enemySize, enemySize);
 
 
 }
@@ -184,6 +195,7 @@ function lose(){
   textSize(15);
   text("YOU LOSE! Click to restart",200,30);
   noLoop();
+
 }
 
 function mousePressed(){
