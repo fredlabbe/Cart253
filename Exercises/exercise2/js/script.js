@@ -36,16 +36,21 @@ let avatarImg;
 let ennemyImg;
 let spaceImg;
 
+//Music
+let song;
+
 //This is the rate of 10% the speed and size will increase
 let rate = 1.1;
 
-//preloads the images and put it in variables
-function preload(){
 
+function preload(){
+//preloads the images and put it in variables
   avatarImg = loadImage("assets/images/falcon.png");
   ennemyImg = loadImage("assets/images/asteroid.png");
   spaceImg = loadImage("assets/images/space.jpg");
 
+  //prealoads the music
+  //song = loadSound("assets/starwarsMusic.mp3");
 }
 
 //
@@ -70,6 +75,9 @@ function setup() {
 
   rect(0,0,500,60);
 
+  //Plays the music
+  //song.play();
+
 
 
 }
@@ -88,7 +96,7 @@ function draw() {
   fill(55, 52, 138);
   rect(0,0,500,60);
   noStroke();
-  fill(201, 83, 128);
+  fill(154, 224, 74);
   textSize(64);
   text(dodges, 10, 50);
 
