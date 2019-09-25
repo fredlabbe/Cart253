@@ -42,6 +42,14 @@ let song;
 //This is the rate of 10% the speed and size will increase
 let rate = 1.1;
 
+//position of laser
+let laserY = 0;
+let laserX = 0;
+
+let laserSize = 1;
+
+let isLaser = false;
+
 
 function preload(){
 //preloads the images and put it in variables
@@ -50,7 +58,7 @@ function preload(){
   spaceImg = loadImage("assets/images/space.jpg");
 
   //prealoads the music
-  //song = loadSound("assets/starwarsMusic.mp3");
+  //song = loadSound('assets/starwarsMusic.mp3');
 }
 
 //
@@ -66,6 +74,9 @@ function setup() {
   avatarX = width/2;
   avatarY = height/2;
 
+  laserX = avatarX;
+  laserY = avatarY;
+
   // Put the enemy to the left at a random y coordinate within the canvas
   enemyX = 0;
   enemyY = random(60,height);
@@ -78,7 +89,8 @@ function setup() {
   //Plays the music
   //song.play();
 
-
+  laserX = avatarX;
+  laserY = avatarY;
 
 }
 
@@ -90,6 +102,7 @@ function draw() {
   // A space background
   //background(255,220,220);
   image(spaceImg,0,60,width,height);
+
   //Setting up the menu bar
   stroke(201, 83, 128);
   //strokeWidth(5);
@@ -97,12 +110,15 @@ function draw() {
   rect(0,0,500,60);
   noStroke();
   fill(154, 224, 74);
+  textFont("Verdana");
   textSize(64);
   text(dodges, 10, 50);
 
   // Default the avatar's velocity to 0 in case no key is pressed this frame
   avatarVX = 0;
   avatarVY = 0;
+
+
 
   // Check which keys are down and set the avatar's velocity based on its
   // speed appropriately
@@ -124,6 +140,19 @@ function draw() {
     avatarVY = avatarSpeed;
   }
 
+  if(keyIsDown(32)){
+    fill(255,0,0);
+    laserSize = 10;
+    console.log("works");
+    isLaser = true;
+    avatarSpeed = 20;
+    //laserX = laserX -10;
+    //laserX-=10;
+  }
+
+  else{
+    avatarSpeed = 10; 
+  }
   // Move the avatar according to its calculated velocity
   avatarX = avatarX + avatarVX;
   avatarY = avatarY + avatarVY;
@@ -132,8 +161,15 @@ function draw() {
   // Update the enemy's position based on its velocity
   enemyX = enemyX + enemyVX;
 
+  //update the laser position
+if(isLaser === true){
 
+  ellipse(laserX,laserY,laserSize,laserSize);
+  isLaser = false;
 
+}
+
+  laserX = laserX - 10;
   // Check if the enemy and avatar overlap - if they do the player loses
   // We do this by checking if the distance between the centre of the enemy
   // and the centre of the avatar is less that their combined radii
@@ -186,12 +222,12 @@ function draw() {
   console.log(dodges);
 
   // Draw the player as an image of the Millenium Falcon
-  //ellipse(avatarX,avatarY,avatarSize,avatarSize);
+  //\\\\\\\\\\\-
   image(avatarImg,avatarX,avatarY,avatarSize,avatarSize);
 
   // The enemy is red
-  fill(255,0,0);
-  // Draw the enemy as a circle
+  //fill(255,0,0);
+  // Draw the enemy as an image
   //ellipse(enemyX,enemyY,enemySize,enemySize);
   image(ennemyImg, enemyX,enemyY,enemySize, enemySize);
 
@@ -201,6 +237,7 @@ function draw() {
 function lose(){
   fill(255,0,0);
   textSize(15);
+  textAlign(LEFT);
   text("YOU LOSE! Click to restart",200,30);
   noLoop();
 
