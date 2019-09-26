@@ -17,6 +17,8 @@ let targetX;
 let targetY;
 let targetImage;
 
+
+
 // The ten decoy images
 let decoyImage1;
 let decoyImage2;
@@ -63,11 +65,18 @@ function setup() {
   background("#ffff00");
   imageMode(CENTER);
 
+
+
   // Use a for loop to draw as many decoys as we need
   for (let i = 0; i < numDecoys; i++) {
     // Choose a random location on the canvas for this decoy
     let x = random(0,width);
     let y = random(0,height);
+    // moves the image if it's under the rectangle
+    if(x>(width-350) && y<(170)){
+      x = 100 + random(0, 100);
+      y = 200 + random(0, 100);
+    }
     // Generate a random number we can use for probability
     let r = random();
     // Use the random number to display one of the ten decoy
@@ -106,12 +115,33 @@ function setup() {
     }
   }
 
+  //sets up the rectangle
+  rectMode(CORNER);
+  fill(255);
+  rect(windowWidth-300,0,300,150);
   // Once we've displayed all decoys, we choose a random location for the target
   targetX = random(0,width);
   targetY = random(0,height);
 
+  // moves the target dog if it's under/top of the rectangle
+  if(targetX>(width-350) && targetY<(170)){
+    targetX = 100 + random(0, 200);
+    targetY = 200 + random(0, 200);
+  }
+
   // And draw it (because it's the last thing drawn, it will always be on top)
   image(targetImage,targetX,targetY);
+  image(targetImage,(width -160),50);
+
+  //Displaying text
+  fill(0);
+  textFont("Helvetica");
+  textSize(30);
+  text("Chien Perdu",(width-250), 120);
+
+  //random movement of dog
+  let tx = random(0,100);
+  let ty = random(0,100);
 }
 
 
@@ -120,6 +150,11 @@ function setup() {
 // Displays the game over screen if the player has won,
 // otherwise nothing (all the gameplay stuff is in mousePressed())
 function draw() {
+
+  // //sets up the rectangle
+  // fill(255);
+  // rect(windowWidth,0,200,100);
+
   if (gameOver) {
     // Prepare our typography
     textFont("Helvetica");
@@ -137,6 +172,8 @@ function draw() {
     stroke(random(255));
     strokeWeight(10);
     ellipse(targetX,targetY,targetImage.width,targetImage.height);
+
+    move();
   }
 }
 
@@ -155,4 +192,12 @@ function mousePressed() {
       gameOver = true;
     }
   }
+}
+function move(){
+
+  targetX = width * noise(tx);
+  targetY = height * noise(ty);
+  tx += 0.01;
+  ty += 0.01;
+  image(targetImage,targetX,targetY);
 }
