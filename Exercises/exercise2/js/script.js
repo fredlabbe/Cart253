@@ -1,7 +1,7 @@
 /******************************************************
 
-Game - The Artful Dodger
-Pippin Barr
+Game - The Asteroid Dodger
+Frederick Labbe
 
 A simple dodging game with keyboard controls
 
@@ -42,13 +42,16 @@ let song;
 //This is the rate of 10% the speed and size will increase
 let rate = 1.1;
 
+//sound when ship is propulsing
+let propulsor;
+
 //position of laser
-let laserY = 0;
-let laserX = 0;
-
-let laserSize = 1;
-
-let isLaser = false;
+// let laserY = 0;
+// let laserX = 0;
+//
+// let laserSize = 1;
+//
+// let isLaser = false;
 
 
 function preload(){
@@ -58,7 +61,10 @@ function preload(){
   spaceImg = loadImage("assets/images/space.jpg");
 
   //prealoads the music
-  //song = loadSound('assets/starwarsMusic.mp3');
+  song = loadSound('assets/starwarsMusic.mp3');
+
+  //preloads propulsing sound
+  propulsor = loadSound('assets/propulsor.wav');
 }
 
 //
@@ -74,23 +80,17 @@ function setup() {
   avatarX = width/2;
   avatarY = height/2;
 
-  laserX = avatarX;
-  laserY = avatarY;
-
   // Put the enemy to the left at a random y coordinate within the canvas
   enemyX = 0;
   enemyY = random(60,height);
 
   // No stroke so it looks cleaner
   noStroke();
-
+//sets up the menu bar
   rect(0,0,500,60);
 
-  //Plays the music
-  //song.play();
-
-  laserX = avatarX;
-  laserY = avatarY;
+  // laserX = avatarX;
+  // laserY = avatarY;
 
 }
 
@@ -103,7 +103,7 @@ function draw() {
   //background(255,220,220);
   image(spaceImg,0,60,width,height);
 
-  //Setting up the menu bar
+  //Setting up the menu bar showing the dodges
   stroke(201, 83, 128);
   //strokeWidth(5);
   fill(55, 52, 138);
@@ -126,6 +126,7 @@ function draw() {
   // Left and right
   if (keyIsDown(LEFT_ARROW)) {
     avatarVX = -avatarSpeed;
+
   }
   else if (keyIsDown(RIGHT_ARROW)) {
     avatarVX = avatarSpeed;
@@ -135,23 +136,31 @@ function draw() {
   // horizontally at the same time)
   if (keyIsDown(UP_ARROW)) {
     avatarVY = -avatarSpeed;
+    //Plays the music
+    song.play();
   }
   else if (keyIsDown(DOWN_ARROW)) {
     avatarVY = avatarSpeed;
   }
 
+// Boosts the speed of the spaceship when the spacebar is pressed but
+// puts it back to normal when it is not anymore
   if(keyIsDown(32)){
     fill(255,0,0);
-    laserSize = 10;
+    //laserSize = 10;
     console.log("works");
-    isLaser = true;
+    //isLaser = true;
     avatarSpeed = 20;
     //laserX = laserX -10;
     //laserX-=10;
+    //plays the sound effect
+    propulsor.play();
   }
 
   else{
-    avatarSpeed = 10; 
+    avatarSpeed = 10;
+    //stops the sound of propuslor
+    propulsor.stop();
   }
   // Move the avatar according to its calculated velocity
   avatarX = avatarX + avatarVX;
@@ -162,14 +171,14 @@ function draw() {
   enemyX = enemyX + enemyVX;
 
   //update the laser position
-if(isLaser === true){
+// if(isLaser === true){
+//
+//   ellipse(laserX,laserY,laserSize,laserSize);
+//   isLaser = false;
+//
+// }
 
-  ellipse(laserX,laserY,laserSize,laserSize);
-  isLaser = false;
-
-}
-
-  laserX = laserX - 10;
+//  laserX = laserX - 10;
   // Check if the enemy and avatar overlap - if they do the player loses
   // We do this by checking if the distance between the centre of the enemy
   // and the centre of the avatar is less that their combined radii
@@ -222,27 +231,27 @@ if(isLaser === true){
   console.log(dodges);
 
   // Draw the player as an image of the Millenium Falcon
-  //\\\\\\\\\\\-
   image(avatarImg,avatarX,avatarY,avatarSize,avatarSize);
 
-  // The enemy is red
-  //fill(255,0,0);
   // Draw the enemy as an image
   //ellipse(enemyX,enemyY,enemySize,enemySize);
   image(ennemyImg, enemyX,enemyY,enemySize, enemySize);
 
 
 }
-
+// Pauses the game and displays a loosing message
 function lose(){
   fill(255,0,0);
   textSize(15);
   textAlign(LEFT);
   text("YOU LOSE! Click to restart",200,30);
   noLoop();
+  enemySpeed = 5;
+  enemySize = 50;
 
 }
 
+//restarts the game
 function mousePressed(){
   loop();
 }
