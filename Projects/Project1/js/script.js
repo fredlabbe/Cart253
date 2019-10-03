@@ -24,7 +24,8 @@ let playerY;
 let playerRadius = 25;
 let playerVX = 0;
 let playerVY = 0;
-let playerMaxSpeed = 2;
+let playerSpeed = 2;
+let playerSprintSpeed = 5;
 // Player health
 let playerHealth;
 let playerMaxHealth = 255;
@@ -37,7 +38,7 @@ let preyY;
 let preyRadius = 25;
 let preyVX;
 let preyVY;
-let preyMaxSpeed = 4;
+let preyMaxSpeed = 8;
 // Prey health
 let preyHealth;
 let preyMaxHealth = 100;
@@ -120,12 +121,12 @@ function draw() {
 function handleInput() {
   // Check for horizontal movement
   if (keyIsDown(LEFT_ARROW)) {
-    playerVX = -playerMaxSpeed;
-    sprint(playerVX,(-1));
+    playerVX = -playerSpeed;
+    //sprint(playerVX,(-1));
   }
   else if (keyIsDown(RIGHT_ARROW)) {
-    playerVX = playerMaxSpeed;
-    sprint(playerVX,(1));
+    playerVX = playerSpeed;
+  //  sprint(playerVX,(1));
   }
   else {
     playerVX = 0;
@@ -133,17 +134,25 @@ function handleInput() {
 
   // Check for vertical movement
   if (keyIsDown(UP_ARROW)) {
-    playerVY = -playerMaxSpeed;
-    sprint(playerVY,(-1));
+    playerVY = -playerSpeed;
+    //sprint(playerVY,(-1));
   }
   else if (keyIsDown(DOWN_ARROW)) {
-    playerVY = playerMaxSpeed;
-    sprint(playerVY,(1));
+    playerVY = playerSpeed;
+    //sprint(playerVY,(1));
   }
   else {
     playerVY = 0;
   }
 
+  if(keyIsDown(16)){
+    console.log("works");
+    playerSpeed = playerSprintSpeed;
+    playerHealth -= 3;
+  }
+  else{
+    playerSpeed = 2;
+  }
 
 }
 
@@ -301,12 +310,12 @@ function showGameOver() {
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
 }
-function sprint(playerVelocity, sign){
-  let velocity = playerVelocity;
-  let direction = sign;
-  if(keyIsDown(16)){
-    console.log("works");
-    velocity = direction*playerMaxSpeed *2;
-    playerHealth -= 2;
-  }
-}
+// function sprint(playerVelocity, sign){
+//   let velocity = playerVelocity;
+//   let direction = sign;
+//   if(keyIsDown(16)){
+//     console.log("works");
+//     velocity = direction*playerMaxSpeed *2;
+//     playerHealth -= 2;
+//   }
+// }
