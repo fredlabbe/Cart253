@@ -81,13 +81,13 @@ function draw() {
     background("#ffff00");
     // Prepare our typography
     textFont("Helvetica");
-    textSize(128);
+    textSize(100);
     textAlign(CENTER,CENTER);
     noStroke();
     fill(random(255));
 
     // Tell them they won!
-    text("YOU WON!",width/2,height/2);
+    text("YOU WON! CLICK TO RESTART",width/2,height/2);
 
     // Draw a circle around the sausage dog to show where it is (even though
     // they already know because they found it!)
@@ -211,8 +211,10 @@ function reset(){
   image(targetImage,targetX,targetY);
   image(targetImage,(width -160),50);
 
+
   //Displaying text
   fill(0);
+  textAlign(LEFT);
   textFont("Helvetica");
   textSize(30);
   text("Chien Perdu",(width-250), 120);
