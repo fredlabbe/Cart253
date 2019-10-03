@@ -24,6 +24,7 @@ let playerY;
 let playerRadius = 25;
 let playerVX = 0;
 let playerVY = 0;
+//Created another variable for the speed of the player when it sprints
 let playerSpeed = 2;
 let playerSprintSpeed = 5;
 // Player health
@@ -38,6 +39,7 @@ let preyY;
 let preyRadius = 25;
 let preyVX;
 let preyVY;
+//increased the ennemy speed to 8
 let preyMaxSpeed = 8;
 // Prey health
 let preyHealth;
@@ -52,6 +54,8 @@ let preyEaten = 0;
 //Noise variables
 let tx;
 let ty;
+
+let state = "Menu";
 
 // setup()
 //
@@ -98,21 +102,37 @@ function setupPlayer() {
 function draw() {
   background(100, 100, 200);
 
-  if (!gameOver) {
-    handleInput();
+  if(state === "Menu"){
 
+    text("Click to play", width / 2, height / 2);
+  }
+  else if(state === "Game"){
+    handleInput();
     movePlayer();
     movePrey();
-
     updateHealth();
     checkEating();
-
     drawPrey();
     drawPlayer();
   }
-  else {
+  else if(state === "GameOver"){
     showGameOver();
   }
+  // if (!gameOver) {
+  //   handleInput();
+  //
+  //   movePlayer();
+  //   movePrey();
+  //
+  //   updateHealth();
+  //   checkEating();
+  //
+  //   drawPrey();
+  //   drawPlayer();
+  // }
+  // else {
+  //   showGameOver();
+  // }
 }
 
 // handleInput()
@@ -144,7 +164,8 @@ function handleInput() {
   else {
     playerVY = 0;
   }
-
+//If the player presses shift(16), its speed is set to sprint speed. Else, put
+// it back to normal.
   if(keyIsDown(16)){
     console.log("works");
     playerSpeed = playerSprintSpeed;
@@ -197,7 +218,7 @@ function updateHealth() {
   // Check if the player is dead (0 health)
   if (playerHealth === 0) {
     // If so, the game is over
-    gameOver = true;
+    state = "GameOver";
   }
 }
 
@@ -247,18 +268,15 @@ function movePrey() {
   //   preyVX = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
   //   preyVY = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
   // }
+  //Added noise instead of random, so the movement is a lot cleaner
   preyVX = map(noise(tx),0,1,-preyMaxSpeed,preyMaxSpeed);
   preyVY = map(noise(ty),0,1,-preyMaxSpeed,preyMaxSpeed);
-
-  // preyX = width * noise(tx);
-  // preyY = height * noise(ty);
-
 
 
   // Update prey position based on velocity
   preyX = preyX + preyVX;
   preyY = preyY + preyVY;
-
+//Changing the tx & ty
   tx += 0.01;
   ty += 0.01;
 
@@ -306,9 +324,23 @@ function showGameOver() {
   // Set up the text to display
   let gameOverText = "GAME OVER\n"; // \n means "new line"
   gameOverText = gameOverText + "You ate " + preyEaten + " prey\n";
-  gameOverText = gameOverText + "before you died."
+  gameOverText = gameOverText + "before you died. \nClick to restart."
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
+}
+
+function mousePressed(){
+
+  if(state === "Menu"){
+    state = "Game";
+  }
+  else if(state === "Game"){
+    state = "GameOver";
+  }
+  else if(state === "GameOver"){
+    state = "Menu";
+    //Should reset all the values to beginning values
+  }
 }
 // function sprint(playerVelocity, sign){
 //   let velocity = playerVelocity;
