@@ -48,6 +48,9 @@ let preyFill = 200;
 let eatHealth = 10;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
+//Noise variables
+let tx;
+let ty;
 
 // setup()
 //
@@ -71,6 +74,8 @@ function setupPrey() {
   preyVX = -preyMaxSpeed;
   preyVY = preyMaxSpeed;
   preyHealth = preyMaxHealth;
+  tx = random(0,1000);
+  ty = random(0,1000);
 }
 
 // setupPlayer()
@@ -116,9 +121,11 @@ function handleInput() {
   // Check for horizontal movement
   if (keyIsDown(LEFT_ARROW)) {
     playerVX = -playerMaxSpeed;
+    sprint(playerVX,(-1));
   }
   else if (keyIsDown(RIGHT_ARROW)) {
     playerVX = playerMaxSpeed;
+    sprint(playerVX,(1));
   }
   else {
     playerVX = 0;
@@ -127,13 +134,17 @@ function handleInput() {
   // Check for vertical movement
   if (keyIsDown(UP_ARROW)) {
     playerVY = -playerMaxSpeed;
+    sprint(playerVY,(-1));
   }
   else if (keyIsDown(DOWN_ARROW)) {
     playerVY = playerMaxSpeed;
+    sprint(playerVY,(1));
   }
   else {
     playerVY = 0;
   }
+
+
 }
 
 // movePlayer()
@@ -201,8 +212,8 @@ function checkEating() {
     // Check if the prey died (health 0)
     if (preyHealth === 0) {
       // Move the "new" prey to a random position
-      preyX = random(0, width);
-      preyY = random(0, height);
+      preyX = random(0,width);
+      preyY = random(0,height);
       // Give it full health
       preyHealth = preyMaxHealth;
       // Track how many prey were eaten
@@ -218,19 +229,30 @@ function movePrey() {
   // Change the prey's velocity at random intervals
   // random() will be < 0.05 5% of the time, so the prey
   // will change direction on 5% of frames
-  if (random() < 0.05) {
-    // Set velocity based on random values to get a new direction
-    // and speed of movement
-    //
-    // Use map() to convert from the 0-1 range of the random() function
-    // to the appropriate range of velocities for the prey
-    preyVX = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
-    preyVY = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
-  }
+  // if (random() < 0.05) {
+  //   // Set velocity based on random values to get a new direction
+  //   // and speed of movement
+  //   //
+  //   // Use map() to convert from the 0-1 range of the random() function
+  //   // to the appropriate range of velocities for the prey
+  //   preyVX = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+  //   preyVY = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+  // }
+  preyVX = map(noise(tx),0,1,-preyMaxSpeed,preyMaxSpeed);
+  preyVY = map(noise(ty),0,1,-preyMaxSpeed,preyMaxSpeed);
+
+  // preyX = width * noise(tx);
+  // preyY = height * noise(ty);
+
+
 
   // Update prey position based on velocity
   preyX = preyX + preyVX;
   preyY = preyY + preyVY;
+
+  tx += 0.01;
+  ty += 0.01;
+
 
   // Screen wrapping
   if (preyX < 0) {
@@ -278,4 +300,13 @@ function showGameOver() {
   gameOverText = gameOverText + "before you died."
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
+}
+function sprint(playerVelocity, sign){
+  let velocity = playerVelocity;
+  let direction = sign;
+  if(keyIsDown(16)){
+    console.log("works");
+    velocity = direction*playerMaxSpeed *2;
+    playerHealth -= 2;
+  }
 }
