@@ -3,7 +3,7 @@
 /******************************************************
 
 Game - Chaser
-Pippin Barr
+Frederick Labbe
 
 A "simple" game of cat and mouse. The player is a circle and can move with keys,
 if they overlap the (randomly moving) prey they "eat it" by sucking out its life
@@ -79,8 +79,8 @@ function setupPrey() {
   preyVX = -preyMaxSpeed;
   preyVY = preyMaxSpeed;
   preyHealth = preyMaxHealth;
-  tx = random(0,1000);
-  ty = random(0,1000);
+  tx = random(0, 1000);
+  ty = random(0, 1000);
 }
 
 // setupPlayer()
@@ -102,11 +102,11 @@ function setupPlayer() {
 function draw() {
   background(100, 100, 200);
 
-  if(state === "Menu"){
+  if (state === "Menu") {
 
     text("Click to play", width / 2, height / 2);
   }
-  else if(state === "Game"){
+  else if (state === "Game") {
     handleInput();
     movePlayer();
     movePrey();
@@ -114,9 +114,10 @@ function draw() {
     checkEating();
     drawPrey();
     drawPlayer();
-  }
-  else if(state === "GameOver"){
+  } else if (state === "GameOver") {
     showGameOver();
+    setupPrey();
+    setupPlayer();
   }
   // if (!gameOver) {
   //   handleInput();
@@ -143,12 +144,10 @@ function handleInput() {
   if (keyIsDown(LEFT_ARROW)) {
     playerVX = -playerSpeed;
     //sprint(playerVX,(-1));
-  }
-  else if (keyIsDown(RIGHT_ARROW)) {
+  } else if (keyIsDown(RIGHT_ARROW)) {
     playerVX = playerSpeed;
-  //  sprint(playerVX,(1));
-  }
-  else {
+    //  sprint(playerVX,(1));
+  } else {
     playerVX = 0;
   }
 
@@ -156,22 +155,19 @@ function handleInput() {
   if (keyIsDown(UP_ARROW)) {
     playerVY = -playerSpeed;
     //sprint(playerVY,(-1));
-  }
-  else if (keyIsDown(DOWN_ARROW)) {
+  } else if (keyIsDown(DOWN_ARROW)) {
     playerVY = playerSpeed;
     //sprint(playerVY,(1));
-  }
-  else {
+  } else {
     playerVY = 0;
   }
-//If the player presses shift(16), its speed is set to sprint speed. Else, put
-// it back to normal.
-  if(keyIsDown(16)){
+  //If the player presses shift(16), its speed is set to sprint speed. Else, put
+  // it back to normal.
+  if (keyIsDown(16)) {
     console.log("works");
     playerSpeed = playerSprintSpeed;
     playerHealth -= 3;
-  }
-  else{
+  } else {
     playerSpeed = 2;
   }
 
@@ -190,8 +186,7 @@ function movePlayer() {
   if (playerX < 0) {
     // Off the left side, so add the width to reset to the right
     playerX = playerX + width;
-  }
-  else if (playerX > width) {
+  } else if (playerX > width) {
     // Off the right side, so subtract the width to reset to the left
     playerX = playerX - width;
   }
@@ -199,8 +194,7 @@ function movePlayer() {
   if (playerY < 0) {
     // Off the top, so add the height to reset to the bottom
     playerY = playerY + height;
-  }
-  else if (playerY > height) {
+  } else if (playerY > height) {
     // Off the bottom, so subtract the height to reset to the top
     playerY = playerY - height;
   }
@@ -242,12 +236,14 @@ function checkEating() {
     // Check if the prey died (health 0)
     if (preyHealth === 0) {
       // Move the "new" prey to a random position
-      preyX = random(0,width);
-      preyY = random(0,height);
+      preyX = random(0, width);
+      preyY = random(0, height);
       // Give it full health
       preyHealth = preyMaxHealth;
       // Track how many prey were eaten
       preyEaten = preyEaten + 1;
+      //Make the prey go faster
+      preyMaxSpeed += 1.25;
     }
   }
 }
@@ -269,14 +265,14 @@ function movePrey() {
   //   preyVY = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
   // }
   //Added noise instead of random, so the movement is a lot cleaner
-  preyVX = map(noise(tx),0,1,-preyMaxSpeed,preyMaxSpeed);
-  preyVY = map(noise(ty),0,1,-preyMaxSpeed,preyMaxSpeed);
+  preyVX = map(noise(tx), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+  preyVY = map(noise(ty), 0, 1, -preyMaxSpeed, preyMaxSpeed);
 
 
   // Update prey position based on velocity
   preyX = preyX + preyVX;
   preyY = preyY + preyVY;
-//Changing the tx & ty
+  //Changing the tx & ty
   tx += 0.01;
   ty += 0.01;
 
@@ -284,15 +280,13 @@ function movePrey() {
   // Screen wrapping
   if (preyX < 0) {
     preyX = preyX + width;
-  }
-  else if (preyX > width) {
+  } else if (preyX > width) {
     preyX = preyX - width;
   }
 
   if (preyY < 0) {
     preyY = preyY + height;
-  }
-  else if (preyY > height) {
+  } else if (preyY > height) {
     preyY = preyY - height;
   }
 }
@@ -329,15 +323,13 @@ function showGameOver() {
   text(gameOverText, width / 2, height / 2);
 }
 
-function mousePressed(){
+function mousePressed() {
 
-  if(state === "Menu"){
+  if (state === "Menu") {
     state = "Game";
-  }
-  else if(state === "Game"){
+  } else if (state === "Game") {
     state = "GameOver";
-  }
-  else if(state === "GameOver"){
+  } else if (state === "GameOver") {
     state = "Menu";
     //Should reset all the values to beginning values
   }
