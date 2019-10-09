@@ -54,9 +54,22 @@ let preyEaten = 0;
 //Noise variables
 let preyTX;
 let preyTY;
-
+//initial state of the game
 let state = "Menu";
+//images
+let playerLeftImg;
+let playerRightImg;
+let playerImg;
+let preyImg;
 
+//preload the images and sounds
+function preload(){
+
+  //images
+  playerLeftImg = loadImage("assets/images/leftShark.png");
+  playerRightImg = loadImage("assets/images/rightShark.png");
+  preyImg = loadImage("assets/images/fish.png");
+}
 // setup()
 //
 // Sets up the basic elements of the game
@@ -64,7 +77,8 @@ function setup() {
   createCanvas(500, 500);
 
   noStroke();
-
+  //initiating the player image to the left shark
+  playerImg = playerLeftImg;
   // We're using simple functions to separate code out
   setupPrey();
   setupPlayer();
@@ -147,9 +161,11 @@ function handleInput() {
   // Check for horizontal movement
   if (keyIsDown(LEFT_ARROW)) {
     playerVX = -playerSpeed;
+    playerImg = playerLeftImg;
     //sprint(playerVX,(-1));
   } else if (keyIsDown(RIGHT_ARROW)) {
     playerVX = playerSpeed;
+    playerImg = playerRightImg;
     //  sprint(playerVX,(1));
   } else {
     playerVX = 0;
@@ -299,16 +315,18 @@ function movePrey() {
 //
 // Draw the prey as an ellipse with alpha based on health
 function drawPrey() {
-  fill(preyFill, preyHealth);
-  ellipse(preyX, preyY, preyRadius * 2);
+//  fill(preyFill, preyHealth);
+  //ellipse(preyX, preyY, preyRadius * 2);
+  image(preyImg,preyX,preyY,preyRadius*2,preyRadius*2);
 }
 
 // drawPlayer()
 //
 // Draw the player as an ellipse with alpha value based on health
 function drawPlayer() {
-  fill(playerFill, playerHealth);
-  ellipse(playerX, playerY, playerRadius * 2);
+  //fill(playerFill, playerHealth);
+  //ellipse(playerX, playerY, playerRadius * 2);
+  image(playerImg,playerX,playerY,playerRadius*3,playerRadius*3);
 }
 
 // showGameOver()
