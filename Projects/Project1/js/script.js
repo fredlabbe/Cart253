@@ -52,8 +52,8 @@ let eatHealth = 10;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
 //Noise variables
-let tx;
-let ty;
+let preyTX;
+let preyTY;
 
 let state = "Menu";
 
@@ -79,8 +79,8 @@ function setupPrey() {
   preyVX = -preyMaxSpeed;
   preyVY = preyMaxSpeed;
   preyHealth = preyMaxHealth;
-  tx = random(0, 1000);
-  ty = random(0, 1000);
+  preyTX = random(0, 1000);
+  preyTY = random(0, 1000);
 }
 
 // setupPlayer()
@@ -103,8 +103,12 @@ function draw() {
   background(100, 100, 200);
 
   if (state === "Menu") {
+    textSize(24);
+    text("Click to play", (width / 2), (height / 2));
+  }
+  else if(state === "Narrative"){
 
-    text("Click to play", width / 2, height / 2);
+    text("You are a shark \nlooking for your dinner.\n You are so hungry!", (width / 2), height / 2);
   }
   else if (state === "Game") {
     handleInput();
@@ -265,16 +269,16 @@ function movePrey() {
   //   preyVY = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
   // }
   //Added noise instead of random, so the movement is a lot cleaner
-  preyVX = map(noise(tx), 0, 1, -preyMaxSpeed, preyMaxSpeed);
-  preyVY = map(noise(ty), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+  preyVX = map(noise(preyTX), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+  preyVY = map(noise(preyTY), 0, 1, -preyMaxSpeed, preyMaxSpeed);
 
 
   // Update prey position based on velocity
   preyX = preyX + preyVX;
   preyY = preyY + preyVY;
   //Changing the tx & ty
-  tx += 0.01;
-  ty += 0.01;
+  preyTX += 0.01;
+  preyTY += 0.01;
 
 
   // Screen wrapping
@@ -326,8 +330,12 @@ function showGameOver() {
 function mousePressed() {
 
   if (state === "Menu") {
+    state = "Narrative";
+  }
+  else if(state === "Narrative"){
     state = "Game";
-  } else if (state === "Game") {
+  }
+  else if (state === "Game") {
     state = "GameOver";
   } else if (state === "GameOver") {
     state = "Menu";
