@@ -21,7 +21,8 @@ let gameOver = false;
 // Player position, size, velocity
 let playerX;
 let playerY;
-let playerRadius = 25;
+//put the player radius bigger
+let playerRadius = 50;
 let playerVX = 0;
 let playerVY = 0;
 //Created another variable for the speed of the player when it sprints
@@ -61,6 +62,12 @@ let playerLeftImg;
 let playerRightImg;
 let playerImg;
 let preyImg;
+let fishImg;
+let fishImg2;
+let fishImg3;
+let backImg;
+
+let isPreyDead = false;
 
 //preload the images and sounds
 function preload(){
@@ -68,7 +75,10 @@ function preload(){
   //images
   playerLeftImg = loadImage("assets/images/leftShark.png");
   playerRightImg = loadImage("assets/images/rightShark.png");
-  preyImg = loadImage("assets/images/fish.png");
+  fishImg = loadImage("assets/images/fish.png");
+  fishImg2 = loadImage("assets/images/fish1.png");
+  fishImg3 = loadImage("assets/images/fish2.png");
+  backImg = loadImage("assets/images/seaBackground.jpg");
 }
 // setup()
 //
@@ -79,9 +89,13 @@ function setup() {
   noStroke();
   //initiating the player image to the left shark
   playerImg = playerLeftImg;
+  //initiating the prey as the first image of the fish
+  preyImg = fishImg;
   // We're using simple functions to separate code out
   setupPrey();
   setupPlayer();
+
+  textAlign(CENTER, CENTER);
 }
 
 // setupPrey()
@@ -114,7 +128,9 @@ function setupPlayer() {
 // displays the two agents.
 // When the game is over, shows the game over screen.
 function draw() {
-  background(100, 100, 200);
+  //background(100, 100, 200);
+  //putting the background image I drew
+  image(backImg,0,0,width,height)
 
   if (state === "Menu") {
     textSize(24);
@@ -161,12 +177,12 @@ function handleInput() {
   // Check for horizontal movement
   if (keyIsDown(LEFT_ARROW)) {
     playerVX = -playerSpeed;
+    //having the left facing shark when goes to the left
     playerImg = playerLeftImg;
-    //sprint(playerVX,(-1));
   } else if (keyIsDown(RIGHT_ARROW)) {
     playerVX = playerSpeed;
+    //having the right facing shark when goes to the right
     playerImg = playerRightImg;
-    //  sprint(playerVX,(1));
   } else {
     playerVX = 0;
   }
@@ -264,6 +280,8 @@ function checkEating() {
       preyEaten = preyEaten + 1;
       //Make the prey go faster
       preyMaxSpeed += 1.25;
+      //putting boolean to true
+      isPreyDead = true;
     }
   }
 }
@@ -313,16 +331,30 @@ function movePrey() {
 
 // drawPrey()
 //
-// Draw the prey as an ellipse with alpha based on health
+// Draw the prey as a radom image in a set of 3 images
 function drawPrey() {
 //  fill(preyFill, preyHealth);
   //ellipse(preyX, preyY, preyRadius * 2);
+  if(isPreyDead === true){
+  let r = random(0,3);
+  console.log(r);
+  if(r < 1){
+    preyImg = fishImg;
+  }
+  else if(r < 2 && r > 1){
+    preyImg = fishImg2;
+  }
+  else if(r < 3 && r > 2){
+    preyImg = fishImg3;
+  }
+}
   image(preyImg,preyX,preyY,preyRadius*2,preyRadius*2);
+  isPreyDead = false;
 }
 
 // drawPlayer()
 //
-// Draw the player as an ellipse with alpha value based on health
+// Draw the player as an image taken from the internet but modified
 function drawPlayer() {
   //fill(playerFill, playerHealth);
   //ellipse(playerX, playerY, playerRadius * 2);
@@ -335,7 +367,7 @@ function drawPlayer() {
 function showGameOver() {
   // Set up the font
   textSize(32);
-  textAlign(CENTER, CENTER);
+
   fill(0);
   // Set up the text to display
   let gameOverText = "GAME OVER\n"; // \n means "new line"
