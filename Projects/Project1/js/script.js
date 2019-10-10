@@ -60,6 +60,8 @@ let state = "Menu";
 //images
 let playerLeftImg;
 let playerRightImg;
+let playerLeftImg2;
+let playerRightImg2;
 let playerImg;
 let preyImg;
 let fishImg;
@@ -75,6 +77,8 @@ function preload(){
   //images
   playerLeftImg = loadImage("assets/images/leftShark.png");
   playerRightImg = loadImage("assets/images/rightShark.png");
+  playerLeftImg2 = loadImage("assets/images/leftShark2.png");
+  playerRightImg2 = loadImage("assets/images/rightShark2.png");
   fishImg = loadImage("assets/images/fish.png");
   fishImg2 = loadImage("assets/images/fish1.png");
   fishImg3 = loadImage("assets/images/fish2.png");
@@ -104,6 +108,8 @@ function setup() {
 function setupPrey() {
   preyX = width / 5;
   preyY = height / 2;
+  //resetting the prey's speed
+  preyMaxSpeed = 8;
   preyVX = -preyMaxSpeed;
   preyVY = preyMaxSpeed;
   preyHealth = preyMaxHealth;
@@ -128,8 +134,7 @@ function setupPlayer() {
 // displays the two agents.
 // When the game is over, shows the game over screen.
 function draw() {
-  //background(100, 100, 200);
-  //putting the background image I drew
+  //putting the background image I drew in photoshop
   image(backImg,0,0,width,height)
 
   if (state === "Menu") {
@@ -153,21 +158,6 @@ function draw() {
     setupPrey();
     setupPlayer();
   }
-  // if (!gameOver) {
-  //   handleInput();
-  //
-  //   movePlayer();
-  //   movePrey();
-  //
-  //   updateHealth();
-  //   checkEating();
-  //
-  //   drawPrey();
-  //   drawPlayer();
-  // }
-  // else {
-  //   showGameOver();
-  // }
 }
 
 // handleInput()
@@ -177,12 +167,24 @@ function handleInput() {
   // Check for horizontal movement
   if (keyIsDown(LEFT_ARROW)) {
     playerVX = -playerSpeed;
-    //having the left facing shark when goes to the left
-    playerImg = playerLeftImg;
+    //having the left facing shark when goes to the left looking
+    //less good as the health goes down
+    if(playerMaxHealth> 66){
+      playerImg = playerLeftImg;
+    }
+    else if(playerMaxHealth> 33 && playerMaxHealth < 66){
+      playerImg = playerLeftImg2;
+    }
   } else if (keyIsDown(RIGHT_ARROW)) {
     playerVX = playerSpeed;
-    //having the right facing shark when goes to the right
-    playerImg = playerRightImg;
+    //having the right facing shark when goes to the right and looking
+    //less good as the health goes down
+    if(playerMaxHealth> 66){
+      playerImg = playerRightImg;
+    }
+    else if(playerMaxHealth> 33 && playerMaxHealth < 66){
+      playerImg = playerRightImg2;
+    }
   } else {
     playerVX = 0;
   }
@@ -190,10 +192,8 @@ function handleInput() {
   // Check for vertical movement
   if (keyIsDown(UP_ARROW)) {
     playerVY = -playerSpeed;
-    //sprint(playerVY,(-1));
   } else if (keyIsDown(DOWN_ARROW)) {
     playerVY = playerSpeed;
-    //sprint(playerVY,(1));
   } else {
     playerVY = 0;
   }
@@ -202,6 +202,7 @@ function handleInput() {
   if (keyIsDown(16)) {
     console.log("works");
     playerSpeed = playerSprintSpeed;
+    //diminishing the player's health if he moves
     playerHealth -= 3;
   } else {
     playerSpeed = 2;
@@ -348,7 +349,11 @@ function drawPrey() {
     preyImg = fishImg3;
   }
 }
+  //making sure the prey does not go through the player by image mode center
+  push();
+  imageMode(CENTER);
   image(preyImg,preyX,preyY,preyRadius*2,preyRadius*2);
+  pop();
   isPreyDead = false;
 }
 
@@ -356,9 +361,11 @@ function drawPrey() {
 //
 // Draw the player as an image taken from the internet but modified
 function drawPlayer() {
-  //fill(playerFill, playerHealth);
-  //ellipse(playerX, playerY, playerRadius * 2);
-  image(playerImg,playerX,playerY,playerRadius*3,playerRadius*3);
+  //making sure the prey does not go through the player by image mode center
+  push();
+  imageMode(CENTER);
+  image(playerImg,playerX,playerY,playerRadius*2,playerRadius*2);
+  pop();
 }
 
 // showGameOver()
@@ -392,12 +399,3 @@ function mousePressed() {
     //Should reset all the values to beginning values
   }
 }
-// function sprint(playerVelocity, sign){
-//   let velocity = playerVelocity;
-//   let direction = sign;
-//   if(keyIsDown(16)){
-//     console.log("works");
-//     velocity = direction*playerMaxSpeed *2;
-//     playerHealth -= 2;
-//   }
-// }
